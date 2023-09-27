@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import ContactForm from '../../components/ContactForm';
+import Axios from 'axios';
 import Mainapp from '../../layouts/Mainapp';
 import ContactCard from '../../components/ContactCard';
-
 import '../../styles/style.css';
 
 class Home extends Component {
@@ -10,71 +9,75 @@ class Home extends Component {
     super(props);
     this.state = {
       contacts: [],
+      loading: true,
     };
   }
 
   componentDidMount() {
-    try {
-      const storedContacts = localStorage.getItem('contacts');
-      if (storedContacts) {
-        this.setState({ contacts: JSON.parse(storedContacts) });
-      }
-    } catch (error) {
-      console.error('Error loading contacts from localStorage:', error);
+    const storedContacts = localStorage.getItem('contacts');
+    if (storedContacts) {
+      this.setState({
+        contacts: JSON.parse(storedContacts),
+        loading: false,
+      });
+    } else {
+      Axios.get('https://www.melivecode.com/api/users')
+        .then((response) => {
+          this.setState({
+            contacts: response.data,
+            loading: false,
+          });
+        })
+        .catch((error) => {
+          console.error('Error loading contacts from API:', error);
+          this.setState({ loading: false });
+        });
     }
   }
+
   handleRemoveContact = (index) => {
-    this.setState((prevState) => {
-      const updatedContacts = [...prevState.contacts];
-      updatedContacts.splice(index, 1);
-      return { contacts: updatedContacts };
-    });
-  };
-  componentDidUpdate( prevState) {
-    try {
-      if (prevState.contacts !== this.state.contacts) {
-        localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    this.setState(
+      (prevState) => {
+        const updatedContacts = [...prevState.contacts];
+        updatedContacts.splice(index, 1);
+        localStorage.setItem('contacts', JSON.stringify(updatedContacts));
+        return { contacts: updatedContacts };
+      },
+      () => {
       }
-    } catch (error) {
-      console.error('Error saving contacts to localStorage:', error);
-    }
-  }
-  
-  handleAddContact = (newContact) => {
-    this.setState((prevState) => ({
-      contacts: [...prevState.contacts, newContact],
-    }));
+    );
   };
 
   render() {
-    const { contacts } = this.state;
+    const { contacts, loading } = this.state;
+
     return (
       <div>
         <Mainapp>
-          <div>
-            <ContactForm onSubmit={this.handleAddContact} />
+          <div className="card mt-5">
+            <div className="card-body">
+              <div className="row justify-content-center">
+                <h2 className="text-center text-info">Contact List</h2>
+
+                {loading ? (
+                  <div className="spinner-border text-primary" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                  </div>
+                ) : contacts.length > 0 ? (
+                  contacts.map((contact, index) => (
+                    <ContactCard
+                      key={index}
+                      contact={contact}
+                      index={index}
+                      onRemove={this.handleRemoveContact}
+                    />
+                  ))
+                ) : (
+                  <p>No contacts available.</p>
+                )}
+              </div>
+            </div>
           </div>
-          <div className='card mt-5'>
-        <div className='card-body'>
-        <div className="row justify-content-center">
-            <h2 className='text-center text-info'>Contact List</h2>
-            
-            {contacts.length > 0 ? (
-                contacts.map((contact, index) => (
-                  <ContactCard
-                    key={index}
-                    contact={contact}
-                    index={index}
-                    onRemove={this.handleRemoveContact}
-                  />
-                ))
-              ) : (
-                <p>No contacts available.</p>
-              )}
-          </div>
-        </div>
-         </div>
-     
         </Mainapp>
       </div>
     );
