@@ -8,7 +8,7 @@ A simple React application for managing contacts. This app fetches contacts from
 - Fetches contacts from an API.
 - Allows you to remove contacts, with updates saved in local storage.
 - Loading spinner while contacts are being fetched.
-- Responsive design for various screen sizes.
+ 
 
 ## Installation
 
