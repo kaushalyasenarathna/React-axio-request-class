@@ -1,37 +1,21 @@
-<<<<<<< HEAD
-# React-lifecycle-method-for-class
-React-lifecycle-method-for-class
-=======
-# Simple Contact Management Application(using react life cycle method)
+# React Contacts App
 
-This is a simple React-based contact management application that allows users to add and manage their contacts. It includes features like adding contacts with names and mobile numbers and removing contacts.
+A simple React application for managing contacts. This app fetches contacts from an API and allows you to remove contacts, with updates saved in local storage.
 
  
-
 ## Features
 
-- Add contacts with full names and mobile numbers.
-- Remove contacts from the list.
-- Data persistence using `localStorage`.
-- Responsive design with Bootstrap.
+- Fetches contacts from an API.
+- Allows you to remove contacts, with updates saved in local storage.
+- Loading spinner while contacts are being fetched.
+- Responsive design for various screen sizes.
 
 ## Installation
 
 To run this application locally, follow these steps:
 
-1. Clone the repository to your local machine:
-
-
-   git clone https://github.com/kaushalyasenarathna/React-lifecycle-method-for-class.git
-
-2. cd React-lifecycle-method-for-class
-
-3. Install the required dependencies:
-       
-       npm install
-
-4. Start the development server:
-
-       npm start
-     
- 
+1. Clone the repository:
+   git clone  https://github.com/kaushalyasenarathna/React-axio-request-class
+2. cd React-axio-request-class
+3.npm install
+4.npm start
